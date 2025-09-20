@@ -50,7 +50,11 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
           className={`nav-button ${isActive('/home') ? 'active' : ''}`}
           onClick={closeMobileMenu}
         >
+<<<<<<< HEAD
           Home
+=======
+          🏠 Home
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
         </Link>
         
         {isLoggedIn ? (
@@ -60,13 +64,21 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
               className={`nav-button ${isActive('/profile') ? 'active' : ''}`}
               onClick={closeMobileMenu}
             >
+<<<<<<< HEAD
               Profile
+=======
+              👤 Profile
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
             </Link>
             <button 
               onClick={handleLogout} 
               className="nav-button"
             >
+<<<<<<< HEAD
               Logout
+=======
+              🚪 Logout
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
             </button>
           </>
         ) : (
@@ -76,14 +88,22 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
               className={`nav-button ${isActive('/signup') ? 'active' : ''}`}
               onClick={closeMobileMenu}
             >
+<<<<<<< HEAD
               Signup
+=======
+              📝 Signup
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
             </Link>
             <Link 
               to="/login" 
               className={`nav-button ${isActive('/login') ? 'active' : ''}`}
               onClick={closeMobileMenu}
             >
+<<<<<<< HEAD
               Login
+=======
+              🔐 Login
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
             </Link>
           </>
         )}

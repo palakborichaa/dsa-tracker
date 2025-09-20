@@ -6,7 +6,10 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import Home from './components/Home';
 import Navbar from './components/navbar';
+<<<<<<< HEAD
 import Background from './components/Background';
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 import './App.css';
 
 function App() {
@@ -21,6 +24,7 @@ function App() {
   return (
     <Router>
       <div className="app-wrapper">
+<<<<<<< HEAD
         <Background />
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <div className="content-wrapper">
@@ -32,6 +36,16 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
+=======
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Home isLoggedIn={isLoggedIn} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
       </div>
     </Router>
   );

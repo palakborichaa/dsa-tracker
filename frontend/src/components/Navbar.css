@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 /* Modern Dark Navbar Styles */
+=======
+/* Modern Navbar Styles */
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-lg) var(--spacing-xl);
+<<<<<<< HEAD
   background: rgba(26, 26, 46, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -13,10 +18,21 @@
   left: 0;
   right: 0;
   width: 100vw;
+=======
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  position: sticky;
+  top: var(--spacing-lg);
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   z-index: 1000;
   transition: var(--transition-normal);
 }
 
+<<<<<<< HEAD
 .navbar::before {
   content: '';
   position: absolute;
@@ -31,6 +47,8 @@
   pointer-events: none;
 }
 
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 .navbar:hover {
   background: rgba(30, 41, 59, 0.9);
   box-shadow: var(--shadow-xl);
@@ -46,12 +64,19 @@
   font-size: 1.75rem;
   font-weight: 700;
   text-decoration: none;
+<<<<<<< HEAD
   background: linear-gradient(135deg, #06b6d4, #7c3aed, #ec4899);
+=======
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   transition: var(--transition-normal);
+<<<<<<< HEAD
   text-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 }
 
 .navbar-brand a:hover {
@@ -64,23 +89,33 @@
   margin-right: var(--spacing-sm);
 }
 
+<<<<<<< HEAD
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.1); }
 }
 
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 .nav-links {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
 }
 
+<<<<<<< HEAD
 
 
 .nav-button {
   padding: var(--spacing-sm) var(--spacing-lg);
   text-decoration: none;
   color: #ffffff;
+=======
+.nav-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  text-decoration: none;
+  color: var(--text-secondary);
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   font-weight: 500;
   background: transparent;
   border: 1px solid transparent;
@@ -91,7 +126,10 @@
   transition: var(--transition-normal);
   position: relative;
   overflow: hidden;
+<<<<<<< HEAD
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 }
 
 .nav-button::before {
@@ -101,7 +139,11 @@
   left: -100%;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+=======
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   transition: var(--transition-normal);
 }
 
@@ -110,6 +152,7 @@
 }
 
 .nav-button:hover {
+<<<<<<< HEAD
   color: #ffffff;
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
@@ -120,6 +163,18 @@
   color: #ffffff;
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
+=======
+  color: var(--text-primary);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.nav-button.active {
+  color: var(--primary-color);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--primary-color);
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
 }
 
 /* Mobile Navigation */
@@ -157,6 +212,10 @@
 @media (max-width: 768px) {
   .navbar {
     padding: var(--spacing-md);
+<<<<<<< HEAD
+=======
+    margin-bottom: var(--spacing-lg);
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   }
   
   .navbar-brand a {
@@ -203,10 +262,13 @@
     padding: var(--spacing-sm) var(--spacing-md);
   }
   
+<<<<<<< HEAD
   .content-wrapper {
     padding-top: calc(60px + var(--spacing-sm));
   }
   
+=======
+>>>>>>> 376bd36c7d51a3edb60d03323b2d24290b236428
   .navbar-brand a {
     font-size: 1.25rem;
   }
