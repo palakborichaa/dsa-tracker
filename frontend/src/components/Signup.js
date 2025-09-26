@@ -11,9 +11,11 @@ function Signup() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  const apiUrl = process.env.REACT_APP_API_URL; // ✅ Use environment variable
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setError(''); // Clear error when user types
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -21,19 +23,19 @@ function Signup() {
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
-      await axios.post('http://localhost:5050/api/auth/signup', form);
+      // POST request to deployed backend
+      await axios.post(`${apiUrl}/auth/signup`, form);
+
       setSuccess('Account created successfully! Please sign in.');
       setForm({ username: '', email: '', password: '' });
-      
+
       // Redirect to login after 2 seconds
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-      
+      setTimeout(() => navigate('/login'), 2000);
+
     } catch (err) {
-      setError(err.response?.data?.message || 'Signup failed. Please try again.');
+      setError(err.response?.data?.error || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -42,19 +44,10 @@ function Signup() {
   return (
     <div className="form-container">
       <h2>🚀 Join Us</h2>
-      
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
-      
-      {success && (
-        <div className="success-message">
-          {success}
-        </div>
-      )}
-      
+
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username</label>
@@ -67,7 +60,7 @@ function Signup() {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
           <input
@@ -80,7 +73,7 @@ function Signup() {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -93,16 +86,16 @@ function Signup() {
             required
           />
         </div>
-        
-        <button 
-          type="submit" 
+
+        <button
+          type="submit"
           className={`submit-btn ${loading ? 'loading' : ''}`}
           disabled={loading}
         >
           {loading ? 'Creating Account...' : 'Create Account'}
         </button>
       </form>
-      
+
       <div className="form-footer">
         Already have an account? <Link to="/login">Sign in here</Link>
       </div>

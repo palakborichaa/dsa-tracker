@@ -1,3 +1,4 @@
+// Profile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import Loading from './Loading';
 import './Profile.css';
 
 function Profile() {
+  const API_BASE = process.env.REACT_APP_API_URL; // Your deployed backend URL
   const [user, setUser] = useState(null);
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,63 +20,72 @@ function Profile() {
 
   const navigate = useNavigate();
 
-  // Fetch user profile
+  // Fetch profile and problems together
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return navigate('/login');
 
-    axios.get('http://localhost:5050/api/auth/profile', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => setUser(res.data.user))
-    .catch(() => navigate('/login'));
-  }, [navigate]);
+    const fetchData = async () => {
+      try {
+        // Fetch user profile
+        const profileRes = await axios.get(`${API_BASE}/auth/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser(profileRes.data.user);
 
-  // Fetch problems list
-  useEffect(() => {
-    fetchProblems();
-  }, []);
+        // Fetch user's DSA problems
+        const problemsRes = await axios.get(`${API_BASE}/dsa`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setProblems(problemsRes.data);
 
-  const fetchProblems = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      const res = await axios.get('http://localhost:5050/api/dsa', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setProblems(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
-  };
+      } catch (err) {
+        console.error(err);
+        navigate('/login'); // Redirect to login if error occurs
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchData();
+  }, [navigate, API_BASE]);
+
+  // Handle form input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Submit new DSA problem
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
     try {
-      await axios.post('http://localhost:5050/api/dsa/add', form, {
+      await axios.post(`${API_BASE}/dsa/add`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setForm({ problemName: '', platform: '', link: '', timeComplexity: '', spaceComplexity: '' });
-      fetchProblems();
+      setForm({
+        problemName: '',
+        platform: '',
+        link: '',
+        timeComplexity: '',
+        spaceComplexity: ''
+      });
+      
+      // Refresh problems list
+      const problemsRes = await axios.get(`${API_BASE}/dsa`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProblems(problemsRes.data);
+
     } catch (err) {
       console.error("Error submitting problem:", err.response?.data || err.message);
     }
   };
 
-  if (!user) {
-    return (
-      <div className="profile-container">
-        <Loading message="Loading profile..." />
-      </div>
-    );
-  }
+  if (loading) return <Loading message="Loading profile..." />;
+
+  if (!user) return null; // Just in case
 
   return (
     <div className="profile-container">
@@ -82,7 +93,7 @@ function Profile() {
         <h2>Your Profile</h2>
       </div>
 
-      {/* User Information Card */}
+      {/* User Info Card */}
       <div className="user-info-card">
         <div className="user-info-grid">
           <div className="info-item">
@@ -100,80 +111,33 @@ function Profile() {
         </div>
       </div>
 
-      {/* Add Problem Section */}
+      {/* Add Problem Form */}
       <div className="add-problem-section">
         <h3>Add a DSA Problem</h3>
         <form onSubmit={handleSubmit} className="problem-form">
-          <div className="form-group">
-            <label htmlFor="problemName">Problem Name</label>
-            <input
-              id="problemName"
-              name="problemName"
-              placeholder="e.g., Two Sum"
-              value={form.problemName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="platform">Platform</label>
-            <input
-              id="platform"
-              name="platform"
-              placeholder="e.g., LeetCode, HackerRank"
-              value={form.platform}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="link">Problem Link</label>
-            <input
-              id="link"
-              name="link"
-              placeholder="https://leetcode.com/problems/..."
-              value={form.link}
-              onChange={handleChange}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="timeComplexity">Time Complexity</label>
-            <input
-              id="timeComplexity"
-              name="timeComplexity"
-              placeholder="e.g., O(n), O(n²)"
-              value={form.timeComplexity}
-              onChange={handleChange}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="spaceComplexity">Space Complexity</label>
-            <input
-              id="spaceComplexity"
-              name="spaceComplexity"
-              placeholder="e.g., O(1), O(n)"
-              value={form.spaceComplexity}
-              onChange={handleChange}
-            />
-          </div>
-          
+          {['problemName', 'platform', 'link', 'timeComplexity', 'spaceComplexity'].map((field) => (
+            <div className="form-group" key={field}>
+              <label htmlFor={field}>{field === 'problemName' ? 'Problem Name' : field.charAt(0).toUpperCase() + field.slice(1)}</label>
+              <input
+                id={field}
+                name={field}
+                placeholder={field === 'problemName' ? 'e.g., Two Sum' : ''}
+                value={form[field]}
+                onChange={handleChange}
+              />
+            </div>
+          ))}
+
           <button type="submit" className="btn btn-primary submit-btn">
             ➕ Add Problem
           </button>
         </form>
       </div>
 
-      {/* Problems List Section */}
+      {/* Problems List */}
       <div className="problems-section">
         <h3>Your Solved Problems</h3>
-        
-        {loading ? (
-          <Loading message="Loading problems..." />
-        ) : problems.length > 0 ? (
+        {problems.length > 0 ? (
           <div className="table-container">
             <table className="problems-table">
               <thead>
@@ -191,28 +155,15 @@ function Profile() {
                 {problems.map((p) => {
                   const created = new Date(p.createdAt);
                   const date = created.toLocaleDateString();
-                  const time = created.toLocaleTimeString([], { 
-                    hour: '2-digit', 
-                    minute: '2-digit', 
-                    hour12: true 
-                  });
+                  const time = created.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
                   return (
                     <tr key={p._id}>
-                      <td>
-                        <strong>{p.problemName}</strong>
-                      </td>
-                      <td>
-                        <span className="platform-badge">{p.platform}</span>
-                      </td>
+                      <td><strong>{p.problemName}</strong></td>
+                      <td><span className="platform-badge">{p.platform}</span></td>
                       <td>
                         {p.link ? (
-                          <a 
-                            href={p.link} 
-                            target="_blank" 
-                            rel="noreferrer"
-                            className="problem-link"
-                          >
+                          <a href={p.link} target="_blank" rel="noreferrer" className="problem-link">
                             🔗 View
                           </a>
                         ) : (
@@ -221,20 +172,8 @@ function Profile() {
                       </td>
                       <td>{date}</td>
                       <td>{time}</td>
-                      <td>
-                        {p.timeComplexity ? (
-                          <span className="complexity-badge">{p.timeComplexity}</span>
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)' }}>—</span>
-                        )}
-                      </td>
-                      <td>
-                        {p.spaceComplexity ? (
-                          <span className="complexity-badge">{p.spaceComplexity}</span>
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)' }}>—</span>
-                        )}
-                      </td>
+                      <td>{p.timeComplexity || '—'}</td>
+                      <td>{p.spaceComplexity || '—'}</td>
                     </tr>
                   );
                 })}

@@ -10,26 +10,29 @@ function Login({ setIsLoggedIn }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const apiUrl = process.env.REACT_APP_API_URL; // ✅ Use environment variable
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setError(''); // Clear error when user types
+    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
-      const res = await axios.post('http://localhost:5050/api/auth/login', form);
-      
+      // POST request to deployed backend
+      const res = await axios.post(`${apiUrl}/auth/login`, form);
+
       const token = res.data.token;
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', token); // Save JWT for authenticated requests
       setIsLoggedIn(true);
-      navigate('/profile');
+      navigate('/profile'); // Redirect to profile/dashboard page
 
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -38,13 +41,9 @@ function Login({ setIsLoggedIn }) {
   return (
     <div className="form-container">
       <h2>🔐 Welcome Back</h2>
-      
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
-      
+
+      {error && <div className="error-message">{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
@@ -58,7 +57,7 @@ function Login({ setIsLoggedIn }) {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -71,16 +70,16 @@ function Login({ setIsLoggedIn }) {
             required
           />
         </div>
-        
-        <button 
-          type="submit" 
+
+        <button
+          type="submit"
           className={`submit-btn ${loading ? 'loading' : ''}`}
           disabled={loading}
         >
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
       </form>
-      
+
       <div className="form-footer">
         Don't have an account? <Link to="/signup">Sign up here</Link>
       </div>
