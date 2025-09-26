@@ -11,10 +11,23 @@ const app = express();
 const PORT = process.env.PORT || 5050; // Use port from .env or default to 5050
 
 // Middleware
+const allowedOrigins = [
+  'https://dsa-tracker-murex.vercel.app',
+  'https://dsa-tracker-git-main-palaks-projects-09ea9c07.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://dsa-tracker-murex.vercel.app', // your frontend URL
-  credentials: true, // if you need cookies/auth
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); // allow non-browser requests
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `CORS policy does not allow access from ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
 }));
+
 app.use(express.json()); // Body parser for JSON requests
 
 // MongoDB Connection
