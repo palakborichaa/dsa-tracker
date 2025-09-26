@@ -2,7 +2,7 @@
 require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import cors
+const cors = require('cors'); // Only declare once
 
 const authRoutes = require('./routes/auth');
 const dsaRoutes = require('./routes/dsa');
@@ -11,7 +11,10 @@ const app = express();
 const PORT = process.env.PORT || 5050; // Use port from .env or default to 5050
 
 // Middleware
-app.use(cors()); // Enable CORS for all origins (adjust in production)
+app.use(cors({
+  origin: 'https://dsa-tracker-murex.vercel.app', // your frontend URL
+  credentials: true, // if you need cookies/auth
+}));
 app.use(express.json()); // Body parser for JSON requests
 
 // MongoDB Connection
@@ -30,7 +33,7 @@ app.get('/', (req, res) => {
   res.send('DSA Tracker Backend API is running!');
 });
 
-// Error handling middleware (optional, but good practice)
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
