@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create Axios instance pointing to deployed backend
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL + '/api', // Backend URL from Vercel env
+  baseURL: (process.env.REACT_APP_API_URL || 'https://dsa-tracker-b8zw.onrender.com') + '/api', // Backend URL with fallback
 });
 
 // Add JWT token to headers if it exists

@@ -10,7 +10,7 @@ function Login({ setIsLoggedIn }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const apiUrl = process.env.REACT_APP_API_URL; // ✅ Use environment variable
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://dsa-tracker-b8zw.onrender.com'; // ✅ Use environment variable with fallback
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,7 +24,7 @@ function Login({ setIsLoggedIn }) {
 
     try {
       // POST request to deployed backend
-      const res = await axios.post(`${apiUrl}/auth/login`, form);
+      const res = await axios.post(`${apiUrl}/api/auth/login`, form);
 
       const token = res.data.token;
       localStorage.setItem('token', token); // Save JWT for authenticated requests

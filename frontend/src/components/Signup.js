@@ -11,7 +11,7 @@ function Signup() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const apiUrl = process.env.REACT_APP_API_URL; // ✅ Use environment variable
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://dsa-tracker-b8zw.onrender.com'; // ✅ Use environment variable with fallback
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,7 +26,7 @@ function Signup() {
 
     try {
       // POST request to deployed backend
-      await axios.post(`${apiUrl}/auth/signup`, form);
+      await axios.post(`${apiUrl}/api/auth/signup`, form);
 
       setSuccess('Account created successfully! Please sign in.');
       setForm({ username: '', email: '', password: '' });
