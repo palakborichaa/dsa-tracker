@@ -155,20 +155,17 @@
 .submit-btn.loading {
   pointer-events: none;
   opacity: 0.7;
+  animation: fadePulse 1.2s ease-in-out infinite;
 }
 
 .submit-btn.loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border: 2px solid transparent;
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  content: none;
+}
+
+@keyframes fadePulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 /* Responsive Design */
