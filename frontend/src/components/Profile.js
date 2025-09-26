@@ -1,12 +1,12 @@
 // Profile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API from '../api';
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import './Profile.css';
 
 function Profile() {
-  const API_BASE = process.env.REACT_APP_API_URL; // Your deployed backend URL
   const [user, setUser] = useState(null);
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,15 +28,11 @@ function Profile() {
     const fetchData = async () => {
       try {
         // Fetch user profile
-        const profileRes = await axios.get(`${API_BASE}/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const profileRes = await API.get(`/auth/profile`);
         setUser(profileRes.data.user);
 
         // Fetch user's DSA problems
-        const problemsRes = await axios.get(`${API_BASE}/dsa`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const problemsRes = await API.get(`/dsa`);
         setProblems(problemsRes.data);
 
       } catch (err) {
@@ -48,7 +44,7 @@ function Profile() {
     };
 
     fetchData();
-  }, [navigate, API_BASE]);
+  }, [navigate]);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -58,12 +54,9 @@ function Profile() {
   // Submit new DSA problem
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
 
     try {
-      await axios.post(`${API_BASE}/dsa/add`, form, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await API.post(`/dsa/add`, form);
       setForm({
         problemName: '',
         platform: '',
@@ -73,9 +66,7 @@ function Profile() {
       });
       
       // Refresh problems list
-      const problemsRes = await axios.get(`${API_BASE}/dsa`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const problemsRes = await API.get(`/dsa`);
       setProblems(problemsRes.data);
 
     } catch (err) {
