@@ -1,7 +1,7 @@
 // routes/dsa.js
 const express = require('express');
 const router = express.Router();
-const DSAProblem = require('../models/DSAproblem'); // Use the correct model name
+const DSAProblem = require('../models/DSAProblem'); // Use the correct model name
 const verifyToken = require('../middleware/verifyToken');
 
 // POST: Add a new problem
